@@ -53,7 +53,7 @@ resource "azurerm_windows_virtual_machine" "vm-terraform" {
   network_interface_ids = [azurerm_network_interface.nic.id]
   size = "Standard_B1s"
   admin_username = "terraadmin"
-  admin_password = "P@ssword123"
+  admin_password = "Password123"
 
   os_disk {
     caching = "ReadWrite"
