@@ -52,7 +52,6 @@ resource "azurerm_windows_virtual_machine" "vm-terraform" {
   resource_group_name = azurerm_resource_group.rgterraform_eg.name
   network_interface_ids = [azurerm_network_interface.nic.id]
   size = "Standard_B1s"
-  admin_password = "P@ssWord123"
   admin_username = "terraadmin"
 
   os_disk {
