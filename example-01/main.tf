@@ -33,6 +33,13 @@ resource "azurerm_subnet" "subnet" {
   address_prefixes = ["10.0.0.0/24"]
 }
 
+resource "azurerm_public_ip" "public_ip" {
+  name = "publicIpConfig"
+  resource_group_name = azurerm_resource_group.rgterraform_eg.name
+  location = azurerm_resource_group.rgterraform_eg.location
+  allocation_method = "dynamic"
+}
+
 resource "azurerm_network_interface" "nic" {
   name = "network-01-terraform-eg"
   resource_group_name = azurerm_resource_group.rgterraform_eg.name
@@ -42,6 +49,7 @@ resource "azurerm_network_interface" "nic" {
     name = "nicfg-terraform-eg"
     subnet_id = azurerm_subnet.subnet.id
     private_ip_address_allocation = "dynamic"
+    public_ip_address_id = azurerm_public_ip.public_ip.id
   }
   
 }
