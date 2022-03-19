@@ -18,25 +18,25 @@ provider "azurerm" {
 }
 
 resource "azurerm_resource_group" "rgterraform_eg" {
-    name     = "rg-terraexample"
-    location = "centralus"
+    name     = "rg-${var.application}"
+    location = var.location
     tags      = {
       Environment = "terraexample"
     }
 }
 
 resource "azurerm_virtual_network" "virtualterraform"{
-  name = "virtualterraform"
+  name = "vnet-${var.application}"
   location = azurerm_resource_group.rgterraform_eg.location
   resource_group_name = azurerm_resource_group.rgterraform_eg.name
-  address_space = ["10.0.0.0/16", "10.1.0.0/16"]
+  address_space = var.vnet_address_space
 }
 
 resource "azurerm_subnet" "subnet" {
-  name = "subnet"
+  name = "subnet-${var.application}"
   resource_group_name = azurerm_resource_group.rgterraform_eg.name
   virtual_network_name = azurerm_virtual_network.virtualterraform.name
-  address_prefixes = ["10.0.0.0/24"]
+  address_prefixes = var.snet_address_space
 }
 
 resource "azurerm_public_ip" "public_ip" {
@@ -47,12 +47,12 @@ resource "azurerm_public_ip" "public_ip" {
 }
 
 resource "azurerm_network_interface" "nic" {
-  name = "network-01-terraform-eg"
+  name = "network-01-${var.application}"
   resource_group_name = azurerm_resource_group.rgterraform_eg.name
   location = azurerm_resource_group.rgterraform_eg.location
 
   ip_configuration {
-    name = "nicfg-terraform-eg"
+    name = "nicfg-${var.application}"
     subnet_id = azurerm_subnet.subnet.id
     private_ip_address_allocation = "Dynamic"
     public_ip_address_id = azurerm_public_ip.public_ip.id
@@ -65,9 +65,9 @@ resource "azurerm_windows_virtual_machine" "vm-terraform" {
   location = azurerm_resource_group.rgterraform_eg.location
   resource_group_name = azurerm_resource_group.rgterraform_eg.name
   network_interface_ids = [azurerm_network_interface.nic.id]
-  size = "Standard_B1s"
-  admin_username = "terraadmin"
-  admin_password = "Password123"
+  size = var.vm_size
+  admin_username = var.admin_username
+  admin_password = var.admin_password
 
   os_disk {
     caching = "ReadWrite"
@@ -75,9 +75,9 @@ resource "azurerm_windows_virtual_machine" "vm-terraform" {
   }
 
   source_image_reference {
-    publisher = "MicrosoftWindowsServer"
-    offer     = "WindowsServer"
-    sku       = "2016-Datacenter"
-    version   = "latest"
+    publisher = var.os.publisher
+    offer     = var.os.offer
+    sku       = var.os.sku
+    version   = var.os.version
   }
 }
