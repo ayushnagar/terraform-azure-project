@@ -37,7 +37,7 @@ resource "azurerm_public_ip" "public_ip" {
   name = "publicIpConfig"
   resource_group_name = azurerm_resource_group.rgterraform_eg.name
   location = azurerm_resource_group.rgterraform_eg.location
-  allocation_method = "static"
+  allocation_method = "Static"
 }
 
 resource "azurerm_network_interface" "nic" {
@@ -48,7 +48,7 @@ resource "azurerm_network_interface" "nic" {
   ip_configuration {
     name = "nicfg-terraform-eg"
     subnet_id = azurerm_subnet.subnet.id
-    private_ip_address_allocation = "dynamic"
+    private_ip_address_allocation = "Dynamic"
     public_ip_address_id = azurerm_public_ip.public_ip.id
   }
   
