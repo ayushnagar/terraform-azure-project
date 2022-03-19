@@ -37,7 +37,7 @@ resource "azurerm_public_ip" "public_ip" {
   name = "publicIpConfig"
   resource_group_name = azurerm_resource_group.rgterraform_eg.name
   location = azurerm_resource_group.rgterraform_eg.location
-  allocation_method = "dynamic"
+  allocation_method = "static"
 }
 
 resource "azurerm_network_interface" "nic" {
